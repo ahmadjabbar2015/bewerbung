@@ -113,7 +113,7 @@
     </style>
 
 @section('content')
-
+    
     {{-- modal --}}
     <!-- Payment Modal -->
     <div class="modal fade" id="paymentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -424,30 +424,177 @@
 </div>
 </div>
 </div> --}}
-    </div>
+    {{-- </div> --}}
     {{-- end moda --}}
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-6">
             <div class="card">
                 <div class="card-box brdr-tp mb-4">
-                    <div class="container ml-3">
-                        <h2 class="mt-3"><a href="#" class="text-dark">deine Bestellung</a></h2>
-                        <h5 class="mt-3"><a href="#" class="text-dark">{{ $product->product_title }}</a>
+                    <div class="container px-3">
+                        <h3 class="pt-1"><a href="#" class="text-dark purple-text">deine Bestellung</a></h3>
+                        <h5 class="pt-1 bottom-border-current"><a href="#" class="text-dark">{{ $product->product_title }}</a>
                         </h5>
-                        <h5 class="mt-3"><a href="#" class="text-dark">{{ $design->design_title }}</a>
+                        <hr>
+                        <h5 class="pt-1"><a href="#" class="text-dark">{{ $design->design_title }}</a>
                         </h5>
-                        <h5 class="mt-3"><a href="#" class="text-dark">{{ $website->website_title }}</a>
+                        <hr>
+                        <h5 class="pt-1"><a href="#" class="text-dark">{{ $website->website_title }}</a>
                         </h5>
+                    </div> 
+                    <!-- end card-box-->
+                    <hr>
+                    <div class="container px-3">
+                        <div class="d-flex">
+                            <h4 class="mt-2 mr-1"><a href="#" class="text-dark">Status</a></h4>
+                            @if ($order->order_status == 0)
+                            <h5 class="mt-2 mr-1"><a href="#" class="text-dark">Confirmation is required</a></h5>
+                            <h4 class="mt-2 " style=""><span
+                                    class="badge badge-warning"
+                                    style="padding-left: 4%;padding-right: 4%;border-radius: 20px;">on hold</span>
+                            </h4>
+                            @endif
+                            @if ($order->order_status == 1 || $order->order_status == 2)
+                            <h5 class="mt-2 mr-1"><a href="#" class="text-dark">Order is in progress</a></h5>
+                            @if ($order->order_status == 1)
+                                <h4 class="mt-2 " style=""><span
+                                        class="badge badge-warning"
+                                        style="padding-left: 4%;padding-right: 4%;border-radius: 20px;">On hold</span></h4>
+                            @elseif($order->order_status == 2)
+                                <h4 class="mt-2  text-light" style=""><span
+                                        class="badge badge-success"
+                                        style="padding-left: 4%;padding-right: 4%;border-radius: 20px;">In Progress</span></h4>
+                            @endif
+                            @endif
+                            @if ($order->order_status == 3)
+                                <h5 class="mt-2 mr-1"><a href="#" class="text-dark">Order is awaiting payment</a></h5>
+                                <h4 class="mt-2 " style=""><span
+                                    class="badge badge-warning"
+                                    style="background-color:orange;border-color:orange;padding-left: 4%;padding-right: 4%;border-radius: 20px;">Zahlung
+                                    ausstehend</span></h4>
+                            @endif
+                            @if ($order->order_status == 4)
+                                <h5 class="mt-2 mr-1"><a href="#" class="text-dark">Order Completed</a></h5>
+                                <h4 class="mt-2 " style=""><span
+                                    class="badge badge-primary"
+                                    style="padding-left: 4%;padding-right: 4%;border-radius: 20px;">Fertiggestellt</span>
+                                </h4>
+                            @endif
+                            {{-- <h5 class="mt-2"><a href="#" class="text-dark">Confirmation is required</a></h5> --}}
+                        </div>
+                        <div>
+                            <button class="btn btn-primary" disabled>Completed Tasks</button>
+                            
+                                <div class="demo-vertical-spacing py-1">
+
+                                  <div class="progress-wrapper">
+                                    <div id="example-caption-2" class="text-right">{{$task_percentage}}%</div>
+                                    <div class="progress progress-bar-primary {{$task_percentage == 0 ? 'progress-bar-danger' : 'progress-bar-success'}}">
+                                      <div
+                                        class="progress-bar"
+                                        role="progressbar"
+                                        aria-valuenow="{{$task_percentage}}"
+                                        aria-valuemin="{{$task_percentage}}"
+                                        aria-valuemax="{{$task_percentage}}"
+                                        style="width: {{$task_percentage == 0 ? '10' : $task_percentage}}%"
+                                        aria-describedby="example-caption-2"
+                                      ></div>
+                                    </div>
+                                  </div>
+                                  
+                                </div>
+                              
+                        </div>
+                        
+
                     </div> <!-- end card-box-->
+                    <hr>
+                    <div class="container px-3">
+                        
+                        <div class="d-flex" style="justify-content: space-between">
+                            <div>
+                                <h5 class="mt-3"><a href="" class="text-dark">Herstellungsdatum</a></h5>
+                                <h4>
+                                    <span class="badge badge-light text-dark btn-outline-secondary"
+                                        style="padding-top:10px;padding-bottom:10px;border-radius: 10px;">
+                                        {{ \Carbon\Carbon::parse($order->completion_date)->format('l, d,F Y') }}
+                                    </span>
+                                </h4>
+                            </div>
+                            <div>
+                                <h5 class="mt-3"><a href="" class="text-dark">Are you in a hurry?</a></h5>
+                                @if ($order->express == 0)
+                                <button class="btn btn-primary " data-toggle="modal" data-target="#exampleModal"
+                                    style="padding-left: 5%;padding-right: 5%;border-radius: 10px;"
+                                    @if ($order->payment_status == 1) disabled @endif>Buch Express 24h
+                                </button>
+                            @else
+                                <button class="btn btn-danger"
+                                    style="padding-left: 5%;padding-right: 5%;border-radius: 10px;">Express gebucht
+                                </button>
+                            @endif
+                            </div>
+                            
+                           
+                        </div>
+                    </div>
                 </div>
             </div>
 
         </div>
-        <div class="col-lg-8">
+        <div class="col-lg-6">
             <div class="card">
                 <div class="card-box brdr-tp">
                     <div class="container">
-                        <div class="row" id="employee_id"
+                        <h3 class="px-2 pt-2 purple-text">FAQ's</h3>
+                        <div class="collapse-margin collapse-icon my-2 " id="faq-delivery-qna">
+                            <div class="card">
+                              <div
+                                class="card-header"
+                                id="deliveryOne"
+                                data-toggle="collapse"
+                                role="button"
+                                data-target="#faq-delivery-one"
+                                aria-expanded="false"
+                                aria-controls="faq-delivery-one"
+                              >
+                                <span class="lead collapse-title">Does my subscription automatically renew?</span>
+                              </div>
+                
+                              <div id="faq-delivery-one" class="collapse" aria-labelledby="deliveryOne" data-parent="#faq-delivery-qna">
+                                <div class="card-body">
+                                    Pastry pudding cookie toffee bonbon jujubes jujubes powder topping. Jelly beans gummi bears sweet roll bonbon muffin liquorice. Wafer lollipop sesame snaps. Brownie macaroon cookie muffin cupcake candy caramels tiramisu. Oat cake chocolate cake sweet jelly-o brownie biscuit marzipan. Jujubes donut marzipan chocolate bar. Jujubes sugar plum jelly beans tiramisu icing cheesecake.
+                                </div>
+                              </div>
+                            </div>
+                            
+                            <div class="card">
+                              <div
+                                class="card-header"
+                                id="deliveryFive"
+                                data-toggle="collapse"
+                                role="button"
+                                data-target="#faq-delivery-five"
+                                aria-expanded="false"
+                                aria-controls="faq-delivery-five"
+                              >
+                                <span class="lead collapse-title">
+                                    Can I store the item on an intranet so everyone has access?
+                                </span>
+                              </div>
+                              <div
+                                id="faq-delivery-five"
+                                class="collapse"
+                                aria-labelledby="deliveryFive"
+                                data-parent="#faq-delivery-qna"
+                              >
+                                <div class="card-body">
+                                    Sweet pie candy jelly. Sesame snaps biscuit sugar plum. Sweet roll topping fruitcake. Caramels liquorice biscuit ice cream fruitcake cotton candy tart. Donut caramels gingerbread jelly-o gingerbread pudding. Gummi bears pastry marshmallow candy canes pie. Pie apple pie carrot cake.
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+                        <h4 class="text-right"><a class="btn btn-primary mb-1" href="{{route('FAQ')}}"> Help Center</a></h4>
+                        {{-- <div class="row" id="employee_id"
                             @if (!empty($emp)) data-id="{{ $emp->id }}" @else data-id="" @endif>
                             @if (!empty($emp))
                                 <div class="col-4">
@@ -495,70 +642,77 @@
                                 </form>
                             </div>
 
-                        </div> <!-- end .padding -->
+                        </div> --}}
+                         <!-- end .padding -->
+                    </div>
+                </div> <!-- end card-box-->
+            </div>
+
+            <div class="card">
+                <div class="card-box card-border-rad">
+                    <h3 class="px-2 py-2 purple-text card-header-contact">Your personal partner</h3>
+                    <div class="container">
+                        
+                        <div class="row" id="employee_id"
+                            @if (!empty($emp)) data-id="{{ $emp->id }}" @else data-id="" @endif>
+                            @if (!empty($emp))
+                                <div class="col-4">
+                                    <img src="{{ url('images/profiles/' . $emp->profile_picture) }}"
+                                        class="rounded-circle img-thumbnail avatar-xl" alt="profile-image">
+                                </div>
+                                <div class="col-6">
+                                    <h4 class="mt-3" style="text-align: left; border-bottom: 1px solid black"><a
+                                            href="#" class="text-dark">{{ $emp->name }}</a></h4>
+                                    <p class="text-muted" style="text-align: left">Email <span> | </span> <span> <a
+                                                href="#" class="text-pink">{{ $emp->email }}</a> </span></p>
+                                </div>
+                            @else
+                                <div class="col-4 text-center">
+                                    <img src="{{ url('images\portrait\small\avatar-s-7.jpg') }}" id="emp_profile"
+                                        class="rounded-circle img-thumbnail avatar-xl" alt="profile-image" width="120">
+                                        <h4 class="mt-1 text-center text-purple">Amalia</h4>
+                                </div>
+                                
+                            @endif
+                            <div class="col-8 pr-2">
+                                <h4 class="mt-1" style="text-align: left; ">
+                                    Hi, do you have a question? 
+                                </h4>
+                                <hr>
+                                
+                                <div class="feed">
+                                    <ul>
+                                        <li>
+                                            <b>I am your personal partner</b><br>
+                                            Please Let me know if there is something! 
+                                        </li>
+                                        @foreach ($messages as $message)
+                                        
+                                            <li @if ($message->from == Auth::user()->id) class="message sent" @else class="message received" @endif>
+                                                <div class="text">
+                                                    {{ $message->messages }}
+                                                </div>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                                <form>
+                                    <input name="user_personal" class="form-control" id="chat-message" style="resize: none" required rows="1">
+                                    <span id="personal_error" style="display: none; color: red">This Field is
+                                        required</span>
+                                    <button type="button" id="personal_button"
+                                        class="btn btn-primary btn-sm waves-effect waves-light mt-2 float-right mb-2"><i data-feather='arrow-right'></i>Your Message</button>
+                                </form>
+                            </div>
+
+                        </div>
+                         <!-- end .padding -->
                     </div>
                 </div> <!-- end card-box-->
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-box brdr-tp">
-                    <div class="container">
-                        <h4 class="mt-3"><a href="#" class="text-dark">Ihr Bestellstatus</a></h4>
-                        @if ($order->order_status == 0)
-                            <h5><a href="#" class="text-dark">Bestätigung ist erforderlich</a></h5>
-                            <h4 class="mt-3 pb-3" style="border-bottom: 0.5px solid lightgrey"><span
-                                    class="badge badge-warning"
-                                    style="padding-left: 4%;padding-right: 4%;border-radius: 20px;">In Warte Stellung</span>
-                            </h4>
-                        @endif
-                        @if ($order->order_status == 1 || $order->order_status == 2)
-                            <h5><a href="#" class="text-dark">Auftrag ist in Bearbeitung</a></h5>
-                            @if ($order->order_status == 1)
-                                <h4 class="mt-3 pb-3" style="border-bottom: 0.5px solid lightgrey"><span
-                                        class="badge badge-warning"
-                                        style="padding-left: 4%;padding-right: 4%;border-radius: 20px;">In Warte
-                                        Stellung</span></h4>
-                            @elseif($order->order_status == 2)
-                                <h4 class="mt-3 pb-3 text-light" style="border-bottom: 0.5px solid lightgrey"><span
-                                        class="badge badge-success"
-                                        style="padding-left: 4%;padding-right: 4%;border-radius: 20px;">In
-                                        Bearbeitung</span></h4>
-                            @endif
-                        @endif
-                        @if ($order->order_status == 3)
-                            <h5><a href="#" class="text-dark">Order is awaiting payment</a></h5>
-                            <h4 class="mt-3 pb-3" style="border-bottom: 0.5px solid lightgrey"><span
-                                    class="badge badge-warning"
-                                    style="background-color:orange;border-color:orange;padding-left: 4%;padding-right: 4%;border-radius: 20px;">Zahlung
-                                    ausstehend</span></h4>
-                        @endif
-                        @if ($order->order_status == 4)
-                            <h5><a href="#" class="text-dark">Order Completed</a></h5>
-                            <h4 class="mt-3 pb-3" style="border-bottom: 0.5px solid lightgrey"><span
-                                    class="badge badge-primary"
-                                    style="padding-left: 4%;padding-right: 4%;border-radius: 20px;">Fertiggestellt</span>
-                            </h4>
-                        @endif
-
-                        <h5 class="mt-3"><a href="#" class="text-dark">Herstellungsdatum</a></h5>
-                        <h4 style="display: inline-block;margin-right: 20%"><span class="badge badge-light text-dark"
-                                style="padding-top:10px;padding-bottom:10px;border-radius: 20px;">{{ \Carbon\Carbon::parse($order->completion_date)->format('l, d,F Y') }}
-                            </span></h4>
-                        @if ($order->express == 0)
-                            <button class="btn btn-primary " data-toggle="modal" data-target="#exampleModal"
-                                style="padding-left: 4%;padding-right: 4%;border-radius: 20px;"
-                                @if ($order->payment_status == 1) disabled @endif>Buch Express 24h</button>
-                        @else
-                            <button class="btn btn-danger"
-                                style="padding-left: 4%;padding-right: 4%;border-radius: 20px;">Express gebucht</button>
-                        @endif
-
-                    </div> <!-- end card-box-->
-
-                </div>
-            </div>
-        </div>
+        
+        {{--  --}}
     </div>
     @if ($order->order_status == 4)
         <div class="row">
@@ -593,10 +747,10 @@
         </div>
     @elseif($order->express == 0 and $order->order_status == 0)
         <div class="row">
-            <div class="col-lg-12 text-center mb-3"
+            {{-- <div class="col-lg-12 text-center mb-3"
                 style="background-color: #7e57c2b5;color: #FFF;padding: 1%;border-radius:20px; ">
-                {{-- <span class="mr-2">Please enter all the data you need to release the order</span><button  data-toggle="modal" data-target="#releaseOrderModal" class="btn btn-primary waves-effect waves-primary releaseOrder" @if ($order->orderprogress->count() >= 4) style="/*border-color: lightgrey;background-color:lightgrey;*/color:white;padding-left: 4%;padding-right: 4%;border-radius: 20px; @if ($progress_count < 4) pointer-events:none;cursor:default; @endif" @endif @if ($order->order_status != 0 || $order->orderprogress->count() < 4) style="border-color: lightgrey;background-color:lightgrey;color:white;padding-left: 4%;padding-right: 4%;border-radius: 20px; @if ($progress_count < 4) pointer-events:none;cursor:default; @endif" disabled @endif>Release Order</button> --}}
-            </div>
+                {{-- <span class="mr-2">Please enter all the data you need to release the order</span><button  data-toggle="modal" data-target="#releaseOrderModal" class="btn btn-primary waves-effect waves-primary releaseOrder" @if ($order->orderprogress->count() >= 4) style="/*border-color: lightgrey;background-color:lightgrey;*/color:white;padding-left: 4%;padding-right: 4%;border-radius: 20px; @if ($progress_count < 4) pointer-events:none;cursor:default; @endif" @endif @if ($order->order_status != 0 || $order->orderprogress->count() < 4) style="border-color: lightgrey;background-color:lightgrey;color:white;padding-left: 4%;padding-right: 4%;border-radius: 20px; @if ($progress_count < 4) pointer-events:none;cursor:default; @endif" disabled @endif>Release Order</button> 
+            </div> --}}
         </div>
     @elseif($order->express != 0 and $order->order_status == 0)
         <div class="container">
@@ -631,55 +785,84 @@
                     <div class="card">
                         <div class="card-box brdr-tp">
                             <div class="container">
-                                <h4 class="mt-3"><a href="#" class="text-dark">Job Advertisement</a></h4>
-                                <span>Data on vacancy notice</span>
-
-                                <form id="job_form" method="POST" enctype="multipart/form-data">
-                                    @csrf
-                                    <div class="form-group mb-3">
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text" id="basic-addon1">Job</span>
+                                
+                               <div class="collapse-margin accordian-collapse-margin collapse-icon collapse-icon-plus my-2 " id="faq-delivery-qna"> 
+                                    <div class="card">
+                                    <div
+                                      class="card-header"
+                                      id="deliveryOne"
+                                      data-toggle="collapse"
+                                      role="button"
+                                      data-target="#job-advertisment"
+                                      aria-expanded="false"
+                                      aria-controls="job-advertisment"
+                                    >
+                                    <div>
+                                        <h4 ><a href="#" class="text-dark">Job Advertisement</a></h4>
+                                        <span>Data on vacancy notice</span>
+                                    </div>
+                                    </div>
+                      
+                                    <div id="job-advertisment" class="collapse" aria-labelledby="deliveryOne" data-parent="#faq-delivery-qna">
+                                      <div class="card-body">
+                                        <form id="job_form" method="POST" enctype="multipart/form-data">
+                                            @csrf
+                                            <div class="form-group mb-3">
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text" id="basic-addon1">Job</span>
+                                                    </div>
+                                                    <input type="text" name="job" id="job" class="form-control" placeholder="Job"
+                                                        value="{{ $order->orderdetail->job }}" aria-label="Job"
+                                                        aria-describedby="basic-addon1"
+                                                        @if ($order->order_status != 0) disabled @endif>
+        
+                                                </div>
                                             </div>
-                                            <input type="text" name="job" id="job" class="form-control" placeholder="Job"
-                                                value="{{ $order->orderdetail->job }}" aria-label="Job"
-                                                aria-describedby="basic-addon1"
-                                                @if ($order->order_status != 0) disabled @endif>
-
-                                        </div>
-                                    </div>
-
-
-                                    <div class="form-group mb-1">
-                                        <div class="input-group">
-                                            <div class="custom-file">
-                                                <label class="custom-file-label" id="job_file_label"
-                                                    for="inputGroupFile04">Choose file</label>
-                                                <input type="file" class="custom-file-input" name="job_file" id="job_file"
-                                                    @if ($order->order_status != 0) disabled @endif>
+        
+        
+                                            <div class="form-group mb-1">
+                                                <div class="input-group">
+                                                    <div class="custom-file">
+                                                        <label class="custom-file-label" id="job_file_label"
+                                                            for="inputGroupFile04">Choose file</label>
+                                                        <input type="file" class="custom-file-input" name="job_file" id="job_file"
+                                                            @if ($order->order_status != 0) disabled @endif>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
+                                            <div class="form-group mb-0">
+                                                <div class="input-group">
+                                                    <textarea class="ckeditor form-control" name="job_description" id="article-ckeditor2" required
+                                                        @if ($order->order_status != 0) disabled @endif
+                                                        {{ $order->orderdetail->job_description }}>{{ $order->orderdetail->job_description }}</textarea>
+                                                    {{-- <textarea name="job_description" id="article-ckeditor2"  cols="25" rows="7" @if ($order->order_status != 0) disabled @endif>{{ $order->orderdetail->job_description }}</textarea> --}}
+                                                    <span id="job_description_error" style="display: none; color: red">This Field is
+                                                        required</span>
+                                                    <button type="submit" id="job_button "
+                                                        class="btn btn-primary btn-sm waves-effect waves-light mt-2 click_button"
+                                                        role="button"
+                                                        data-target="#job-advertisment"
+                                                        aria-expanded="false"
+                                                        aria-controls="job-advertisment"
+                                                        @if ($order->order_status == 0) style="padding-left: 4%;padding-right: 4%;border-radius: 20px;" @else style="background-color: lightgrey;border-color:lightgrey;padding-left: 4%;padding-right: 4%;border-radius: 20px;" @endif
+                                                        {{-- disabled --}}
+                                                        >Save</button>
+                                                </div>
+        
+                                            </div>
+        
+                                        </form>
+                                        <span id="job_error" style="color: red;display: none">Atleast One of the followig fields
+                                            must be filled</span>
+                                        <span id="job_success" style="color: green;display: none">Job saved successfully</span>
+                                      </div>
                                     </div>
-                                    <div class="form-group mb-0">
-                                        <div class="input-group">
-                                            <textarea class="ckeditor form-control" name="job_description" id="article-ckeditor2" required
-                                                @if ($order->order_status != 0) disabled @endif
-                                                {{ $order->orderdetail->job_description }}>{{ $order->orderdetail->job_description }}</textarea>
-                                            {{-- <textarea name="job_description" id="article-ckeditor2"  cols="25" rows="7" @if ($order->order_status != 0) disabled @endif>{{ $order->orderdetail->job_description }}</textarea> --}}
-                                            <span id="job_description_error" style="display: none; color: red">This Field is
-                                                required</span>
-                                            <button type="submit" id="job_button"
-                                                class="btn btn-primary btn-sm waves-effect waves-light mt-2"
-                                                @if ($order->order_status == 0) style="padding-left: 4%;padding-right: 4%;border-radius: 20px;" @else style="background-color: lightgrey;border-color:lightgrey;padding-left: 4%;padding-right: 4%;border-radius: 20px;" @endif
-                                                disabled>Save</button>
-                                        </div>
+                                  </div>
+                               </div>
+                                
 
-                                    </div>
-
-                                </form>
-                                <span id="job_error" style="color: red;display: none">Atleast One of the followig fields
-                                    must be filled</span>
-                                <span id="job_success" style="color: green;display: none">Job saved successfully</span>
+                                
                             </div>
                         </div>
                     </div> <!-- end card-box-->
@@ -691,23 +874,57 @@
                         <div class="card">
                             <div class="card-box brdr-tp">
                                 <div class="container">
-                                    <h4 class="mt-3"><a href="#" class="text-dark">Documents</a></h4>
-                                    <span>Upload documents e.g current CV</span>
-                                         <br><br>
-                                    <form method="post" action="{{ url('documents/' . $order->id) }}"
-                                        enctype="multipart/form-data" class="dropzone" id="dropzone">
-                                        @csrf
-                                        <input type="file" name="documents" class="dropify"  data-max-file-size="1M" /><br><br>
-
-                                    @if ($order->documents->count() == 0)
-                                        <span class="badge badge-warning" id="document_error"
-                                                style="padding:1%;border-radius: 20px;">You Haven't uploaded any documents
-                                                yet. Documents are required</span>
-                                    @endif
-                                    <button class="btn btn-success mt-1" id="documentsSubmit"
-                                        style="padding-left: 4%;padding-right: 4%;border-radius: 20px;"
-                                        @if ($order->order_status != 0) disabled @endif>Save</button>
-                                    </form>
+                                    <div class="collapse-margin accordian-collapse-margin collapse-icon collapse-icon-plus my-2 " id="faq-delivery-qna"> 
+                                        <div class="card">
+                                        <div
+                                          class="card-header"
+                                          id="deliveryOne"
+                                          data-toggle="collapse"
+                                          role="button"
+                                          data-target="#docs-upload"
+                                          aria-expanded="false"
+                                          aria-controls="docs-upload"
+                                        >
+                                          {{-- <span class="lead collapse-title">Job Advertisement</span> --}}
+                                            <div>
+                                                <h4 class=""><a href="#" class="text-dark lead collapse-title">Documents</a></h4>
+                                            <span>Upload documents e.g current CV</span>
+                                            </div>
+                                        </div>
+                          
+                                        <div id="docs-upload" class="collapse" aria-labelledby="deliveryOne" data-parent="#faq-delivery-qna">
+                                          <div class="card-body">
+                                            
+                                            <form id="docs_form" method="post" action="{{ url('documents/' . $order->id) }}" enctype="multipart/form-data"
+                                                
+                                                 class="dropzone" id="dropzone">
+                                                @csrf
+                                                <input type="file" name="documents" class="dropify"  data-max-file-size="1M" /><br><br>
+        
+                                                @if ($order->documents->count() == 0)
+                                                    <span class="badge badge-warning" id="document_error"
+                                                            style="padding:1%;border-radius: 20px;">You Haven't uploaded any documents
+                                                            yet. Documents are required</span>
+                                                @endif
+                                                <button class="btn btn-success mt-1 click_button" id="documentsSubmit "
+                                                    style="padding-left: 4%;padding-right: 4%;border-radius: 20px;"
+                                                    role="button"
+                                                    data-target="#docs-upload"
+                                                    aria-expanded="false"
+                                                    aria-controls="docs-upload"
+                                                    {{-- @if ($order->order_status != 0) disabled @endif --}}
+                                                    >Save</button>
+                                            </form>
+                                            <span id="job_error" style="color: red;display: none">Atleast One of the followig fields
+                                                must be filled</span>
+                                            <span id="job_success" style="color: green;display: none">Job saved successfully</span>
+                                          </div>
+                                        </div>
+                                      </div>
+                                   </div>
+                                    
+                                         
+                                    
                                 </div> <!-- end card-box-->
                             </div>
                         </div>
@@ -737,6 +954,72 @@
                     </div>
                 @endif
 
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-box brdr-tp">
+                            <div class="container">
+                                
+                               <div class="collapse-margin accordian-collapse-margin collapse-icon collapse-icon-plus my-2 " id="faq-delivery-qna"> 
+                                    <div class="card">
+                                    <div
+                                      class="card-header"
+                                      id="deliveryOne"
+                                      data-toggle="collapse"
+                                      role="button"
+                                      data-target="#optional"
+                                      aria-expanded="false"
+                                      aria-controls="optional"
+                                    >
+                                        <div>
+                                            <h4 ><a href="#" class="text-dark">Optional</a></h4>
+                                            <span>Additional Information</span>
+                                        </div>
+                                    </div>
+                      
+                                    <div id="optional" class="collapse" aria-labelledby="deliveryOne" data-parent="#faq-delivery-qna">
+                                      <div class="card-body">
+                                        <form id="additional_info_form">
+                                            {{-- @csrf --}}
+                                            
+                                            <div class="form-group mb-0">
+                                                <div class="input-group">
+                                                    <textarea class="ckeditor form-control" name="job_description" id="article-ckeditor2" required
+                                                        @if ($order->order_status != 0) disabled @endif
+                                                        {{ $order->orderdetail->job_description }}>{{ $order->orderdetail->job_description }}</textarea>
+                                                    {{-- <textarea name="job_description" id="article-ckeditor2"  cols="25" rows="7" @if ($order->order_status != 0) disabled @endif>{{ $order->orderdetail->job_description }}</textarea> --}}
+                                                    <span id="job_description_error" style="display: none; color: red">This Field is
+                                                        required</span>
+                                                    <button type="submit" id="additional_info_button" 
+                                                        class="btn btn-primary btn-sm waves-effect waves-light mt-2 click_button"
+                                                        role="button"
+                                                        data-target="#optional"
+                                                        aria-expanded="false"
+                                                        aria-controls="optional"
+                                                        @if ($order->order_status == 0) style="padding-left: 4%;padding-right: 4%;border-radius: 20px;" @else style="background-color: lightgrey;border-color:lightgrey;padding-left: 4%;padding-right: 4%;border-radius: 20px;" @endif
+                                                        {{-- disabled --}}
+                                                        >Save</button>
+                                                </div>
+        
+                                            </div>
+        
+                                        </form>
+                                        <span id="job_error" style="color: red;display: none">Atleast One of the followig fields
+                                            must be filled</span>
+                                        <span id="job_success" style="color: green;display: none">Job saved successfully</span>
+                                      </div>
+                                    </div>
+                                  </div>
+                               </div>
+                                
+
+                                
+                            </div>
+                        </div>
+                    </div> <!-- end card-box-->
+
+
+                </div>
+
             </div>
 
         </div>
@@ -746,41 +1029,74 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
-                    <div class="card-box brdr-tp" id="qualifications_card">
-
-                      <div class="container">
-                        <h4 class="mt-3"><a href="#" class="text-dark">Qualifications</a></h4>
-                        <span>Personal Strengths | Specifics </span>
-
-                        <form id="qualifications_form">
-                            @csrf
-                            <div class="form-group mb-0">
-                                <div class="input-group">
-                                    <textarea class="ckeditor form-control" name="notes"  id="note" required   @if ($order->order_status != 0 || $order->orderdetail->qualifications == '-1') disabled @endif required
-                                        @if ($order->orderdetail->qualifications != '-1')
-                                        {{ $order->orderdetail->qualifications }}
-                                        @endif></textarea>
-                                    <span id="qualifications_error" style="display: none; color: red">This Field is
-                                        required</span>
-                                    <button type="button" id="qualifications_button_skip"
-                                        class="btn btn-light btn-sm waves-effect waves-light mt-2"
-                                        @if (empty($order->orderdetail->qualifications)) style="padding-left: 4%;padding-right: 4%;border-radius: 20px;" @else style="border-color:lightgrey;padding-left: 4%;padding-right: 4%;border-radius: 20px;" disabled @endif>
-                                        @if ($order->orderdetail->qualifications == '-1')
-                                            Skipped
-                                        @else
-                                            Skip
-                                        @endif
-                                    </button>
-                                    <button type="button" id="qualifications_button"
-                                        class="btn btn-primary btn-sm waves-effect waves-light mt-2"
-                                        @if ($order->order_status == 0) style="padding-left: 4%;padding-right: 4%;border-radius: 20px;" @elseif($order->order_status != 0 || $order->orderdetail->qualifications == '-1')  style="background-color: lightgrey;border-color:lightgrey;padding-left: 4%;padding-right: 4%;border-radius: 20px;" @endif
-                                        disabled>Save</button>
-
-                                </div>
-                            </div>
-                        </form>
-                      </div>
-                    </div>
+                        <div class="card-box brdr-tp">
+                            <div class="container">
+                                <div class="collapse-margin accordian-collapse-margin collapse-icon collapse-icon-plus my-2 " id="faq-delivery-qna"> 
+                                    <div class="card">
+                                    <div
+                                      class="card-header"
+                                      id="deliveryOne"
+                                      data-toggle="collapse"
+                                      role="button"
+                                      data-target="#qualifications"
+                                      aria-expanded="false"
+                                      aria-controls="qualifications"
+                                    >
+                                      
+                                        <div>
+                                            <h4 ><a href="#" class="text-dark">Qualifications</a></h4>
+                                            <span>Personal Strengths | Specifics </span>
+                                        </div>
+                                    </div>
+                      
+                                    <div id="qualifications" class="collapse" aria-labelledby="deliveryOne" data-parent="#faq-delivery-qna">
+                                      <div class="card-body">
+                                        
+                                        <form id="qualifications_form">
+                                            @csrf
+                                            <div class="form-group mb-0">
+                                                <div class="input-group">
+                                                    <textarea class="ckeditor form-control" name="notes"  id="note" required   @if ($order->order_status != 0 || $order->orderdetail->qualifications == '-1') disabled @endif required
+                                                        @if ($order->orderdetail->qualifications != '-1')
+                                                        {{ $order->orderdetail->qualifications }}
+                                                        @endif></textarea>
+                                                    <span id="qualifications_error" style="display: none; color: red">This Field is
+                                                        required</span>
+                                                    <button type="button" id="qualifications_button_skip"
+                                                        class="btn btn-light btn-sm waves-effect waves-light mt-2"
+                                                        @if (empty($order->orderdetail->qualifications)) style="padding-left: 4%;padding-right: 4%;border-radius: 20px;" @else style="border-color:lightgrey;padding-left: 4%;padding-right: 4%;border-radius: 20px;" disabled @endif>
+                                                        @if ($order->orderdetail->qualifications == '-1')
+                                                            Skipped
+                                                        @else
+                                                            Skip
+                                                        @endif
+                                                    </button>
+                                                    <button type="button" id="qualifications_button "
+                                                        class="btn btn-primary btn-sm waves-effect waves-light mt-2 click_button"
+                                                        role="button"
+                                                        data-target="#qualifications"
+                                                        aria-expanded="false"
+                                                        aria-controls="qualifications"
+                                                        @if ($order->order_status == 0) style="padding-left: 4%;padding-right: 4%;border-radius: 20px;" @elseif($order->order_status != 0 || $order->orderdetail->qualifications == '-1')  style="background-color: lightgrey;border-color:lightgrey;padding-left: 4%;padding-right: 4%;border-radius: 20px;" @endif
+                                                        {{-- disabled --}}
+                                                        >Save</button>
+                
+                                                </div>
+                                            </div>
+                                        </form>
+                                        <span id="job_error" style="color: red;display: none">Atleast One of the followig fields
+                                            must be filled</span>
+                                        <span id="job_success" style="color: green;display: none">Job saved successfully</span>
+                                      </div>
+                                    </div>
+                                  </div>
+                               </div>
+                                
+                                     
+                                
+                            </div> <!-- end card-box-->
+                        </div>
+                    
                     </div> <!-- end card-box-->
 
                 </div>
@@ -788,74 +1104,111 @@
 
                 <div class="col-md-12">
                    <div class="card">
-                    <div class="card-box brdr-tp" id="motivation_card">
+                    <div class="card-box brdr-tp">
                         <div class="container">
-                        <h4 class="mt-3"><a href="#" class="text-dark">Motivation</a></h4>
-                        <span>Why are you interested in this job ? </span>
-
-                        <form id="motivation_form">
-
-                            <div class="form-group mb-2">
-                                <div class="input-group">
-                                    <textarea class="ckeditor form-control" name="notes"  id="note" required   @if ($order->order_status != 0 || $order->orderdetail->qualifications == '-1') disabled @endif required
-                                        @if ($order->order_status != 0 || $order->orderdetail->motivation_description == '-1') disabled @endif required
-                                        @if ($order->orderdetail->motivation_description != '-1')
-                                        {{ $order->orderdetail->motivation_description }}
-                                        @endif></textarea>
-                                    <span id="motivation_description_error" style="display: none; color: red">This Field is
-                                        required</span>
-                                </div>
-                            </div>
-                            <span>Optional Information </span>
-                            <div class="form-group mb-3">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text" id="basic-addon1">Salary</span>
+                            <div class="collapse-margin accordian-collapse-margin collapse-icon collapse-icon-plus my-2 " id="faq-delivery-qna"> 
+                                <div class="card">
+                                <div
+                                  class="card-header"
+                                  id="deliveryOne"
+                                  data-toggle="collapse"
+                                  role="button"
+                                  data-target="#motivation"
+                                  aria-expanded="false"
+                                  aria-controls="motivation"
+                                >
+                                  {{-- <span class="lead collapse-title">Job Advertisement</span> --}}
+                                    <div>
+                                        <h4 ><a href="#" class="text-dark">Motivation</a></h4>
+                                        <span>Why are you interested in this job ? </span>
                                     </div>
-                                    <input type="text" id="salary" class="form-control" placeholder="Salary"
-                                        aria-label="Username" aria-describedby="basic-addon1"
-                                        value="{{ $order->orderdetail->motivation_salary }}"
-                                        @if ($order->order_status != 0 || $order->orderdetail->motivation_description == '-1') disabled @endif>
-
                                 </div>
-                            </div>
-                            <div class="form-group mb-3">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text" id="basic-addon1">Entry Date</span>
-                                    </div>
-                                    <input type="text" id="entry_date" class="form-control" placeholder="Entry Date"
-                                        aria-label="Username" aria-describedby="basic-addon1"
-                                        value="{{ $order->orderdetail->motivation_entry_date }}"
-                                        @if ($order->order_status != 0 || $order->orderdetail->motivation_description == '-1') disabled @endif>
+                  
+                                <div id="motivation" class="collapse" aria-labelledby="deliveryOne" data-parent="#faq-delivery-qna">
+                                  <div class="card-body">
+                                    <form id="motivation_form">
 
+                                        <div class="form-group mb-2">
+                                            <div class="input-group">
+                                                <textarea class="ckeditor form-control" name="notes"  id="note" required   @if ($order->order_status != 0 || $order->orderdetail->qualifications == '-1') disabled @endif required
+                                                    @if ($order->order_status != 0 || $order->orderdetail->motivation_description == '-1') disabled @endif required
+                                                    @if ($order->orderdetail->motivation_description != '-1')
+                                                    {{ $order->orderdetail->motivation_description }}
+                                                    @endif></textarea>
+                                                <span id="motivation_description_error" style="display: none; color: red">This Field is
+                                                    required</span>
+                                            </div>
+                                        </div>
+                                        <span>Optional Information </span>
+                                        <div class="form-group mb-3">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" id="basic-addon1">Salary</span>
+                                                </div>
+                                                <input type="text" id="salary" class="form-control" placeholder="Salary"
+                                                    aria-label="Username" aria-describedby="basic-addon1"
+                                                    value="{{ $order->orderdetail->motivation_salary }}"
+                                                    @if ($order->order_status != 0 || $order->orderdetail->motivation_description == '-1') disabled @endif>
+            
+                                            </div>
+                                        </div>
+                                        <div class="form-group mb-3">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" id="basic-addon1">Entry Date</span>
+                                                </div>
+                                                <input type="text" id="entry_date" class="form-control" placeholder="Entry Date"
+                                                    aria-label="Username" aria-describedby="basic-addon1"
+                                                    value="{{ $order->orderdetail->motivation_entry_date }}"
+                                                    @if ($order->order_status != 0 || $order->orderdetail->motivation_description == '-1') disabled @endif>
+            
+                                            </div>
+                                        </div>
+            
+                                        <button type="button" id="motivation_button_skip"
+                                            class="btn btn-light btn-sm waves-effect waves-light"
+                                            
+                                            @if (empty($order->orderdetail->motivation_description)) style="padding-left: 4%;padding-right: 4%;border-radius: 20px;" @else style="border-color: lightgrey;padding-left: 4%;padding-right: 4%;border-radius: 20px;" disabled @endif>
+                                            @if ($order->orderdetail->motivation_description == '-1')
+                                                Skipped
+                                            @else
+                                                Skip
+                                            @endif
+                                        </button>
+                                        <button type="button" id="motivation_button"
+                                            role="button"
+                                            data-target="#motivation"
+                                            aria-expanded="false"
+                                            aria-controls="motivation"
+                                            class="btn btn-primary btn-sm waves-effect waves-light click_button"
+                                            @if ($order->order_status == 0) style="padding-left: 4%;padding-right: 4%;border-radius: 20px;" @elseif($order->order_status != 0 || $order->orderdetail->motivation_description == '-1')  style="background-color: lightgrey;border-color:lightgrey;padding-left: 4%;padding-right: 4%;border-radius: 20px;" @endif
+                                            {{-- disabled --}}
+                                            >Save</button>
+            
+            
+                                    </form>
+                                    
+                                    <span id="job_error" style="color: red;display: none">Atleast One of the followig fields
+                                        must be filled</span>
+                                    <span id="job_success" style="color: green;display: none">Job saved successfully</span>
+                                  </div>
                                 </div>
-                            </div>
-
-                            <button type="button" id="motivation_button_skip"
-                                class="btn btn-light btn-sm waves-effect waves-light"
-                                @if (empty($order->orderdetail->motivation_description)) style="padding-left: 4%;padding-right: 4%;border-radius: 20px;" @else style="border-color: lightgrey;padding-left: 4%;padding-right: 4%;border-radius: 20px;" disabled @endif>
-                                @if ($order->orderdetail->motivation_description == '-1')
-                                    Skipped
-                                @else
-                                    Skip
-                                @endif
-                            </button>
-                            <button type="button" id="motivation_button"
-                                class="btn btn-primary btn-sm waves-effect waves-light"
-                                @if ($order->order_status == 0) style="padding-left: 4%;padding-right: 4%;border-radius: 20px;" @elseif($order->order_status != 0 || $order->orderdetail->motivation_description == '-1')  style="background-color: lightgrey;border-color:lightgrey;padding-left: 4%;padding-right: 4%;border-radius: 20px;" @endif
-                                disabled>Save</button>
-
-
-                        </form>
-
-                    </div> <!-- end card-box-->
+                              </div>
+                           </div>
+                            
+                                 
+                            
+                        </div> <!-- end card-box-->
+                    </div>
+                    
 
                 </div>
 
-            </div> <!-- end .padding -->
-        </div> <!-- end card-box-->
-    </div> <!-- end col -->
+                </div> <!-- end .padding -->
+            </div> <!-- end card-box-->
+        </div> <!-- end col -->
+
+        
     </div>
     </div>
     <div class="separator text-center job-l">
@@ -933,6 +1286,7 @@
         </div>
         </div>
     </div>
+    
 @endsection
 
 @section('vendor-script')
@@ -944,6 +1298,7 @@
 @section('page-script')
     <!-- Page js files -->
     <script src="{{ asset(mix('js/scripts/forms/form-validation.js')) }}"></script>
+    <script src="{{ asset('js/core/current-order.js') }}"></script>
     <script src="https://cdn.ckeditor.com/4.14.1/standard/ckeditor.js"></script>
 @endsection
 <script>

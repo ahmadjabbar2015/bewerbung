@@ -52,40 +52,53 @@
                         </div>
 
                         @foreach ($orders as $order)
+
+
                             <div class="container mt-4" id="allsearch">
                                 <div>
-                                    @if ($order->order_status == '2')
-                                        <?php
-
-                                        $product_description = explode('<li>', $order->pdetail->product_description);
-                                        $data = $words = preg_replace('/(?<!\ )[A-Z]/', ' $0', $product_description[0]);
-                                        if ($product_description[0] == $data) {
-                                            unset($product_description[0]);
-                                        }
-
-                                        $check = explode(',', $order->check_box);
-                                        $check_val = count($check);
-                                        ?>
-                                        <h3>{{ $order->pdetail->product_title }}</h3>
-                                        <hr style="border: 0.3px solid lightgrey;width: 100%;">
-                                        <?php $loop_size = sizeof($product_description); ?>
-                                        @foreach ($product_description as $description)
+                                    <?php
+                                    $data = explode(',', $order->user_id);
+                                     foreach ($data as $key => $value) {
+                                    ?>
+                                    @if ($value==$user->id)
+                                        @if ($order->order_status == '2')
                                             <?php
+                                            $product_description = explode('<li>', $order->pdetail->product_description);
+                                            $data = $words = preg_replace('/(?<!\ )[A-Z]/', ' $0', $product_description[0]);
+                                            // dd($data , $product_description[0], $order->check_box );
 
-                                            $checked = $loop->iteration;
+                                            if ($product_description[0] == $data) {
+                                                unset($product_description[0]);
+                                            }
+
+                                            $check = explode(',', $order->check_box);
+                                            $check_val = count($check);
+                                            // dd($check_val);
                                             ?>
-                                            <div class="row">
-                                                <input class="check" id="checkbox1" type="checkbox"
-                                                    data-id="{{ $loop->iteration }}" data-loop="{{ $loop_size }}"
-                                                    data-name="{{ $order->id }}" value="{{ $check_val }}"
-                                                    @if (in_array($checked, $check)) checked @endif>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                <h5>{!! $description !!}</h5>
-                                                <hr style="border: 0.3px solid lightgrey;width: 100%;">
-                                            </div>
-                                        @endforeach
-                                        <?php
-                                        ?>
+                                            <h3>{{ $order->pdetail->product_title }}</h3>
+                                            <hr style="border: 0.3px solid lightgrey;width: 100%;">
+                                            <?php $loop_size = sizeof($product_description); ?>
+                                            @foreach ($product_description as $description)
+                                                <?php
+
+                                                $checked = $loop->iteration;
+                                                ?>
+                                                <div class="row">
+                                                    <input class="check" id="checkbox1" type="checkbox"
+                                                        data-id="{{ $loop->iteration }}" data-loop="{{ $loop_size }}"
+                                                        data-name="{{ $order->id }}" value="{{ $check_val }}"
+                                                        @if (in_array($checked, $check)) checked @endif>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                    <h5>{!! $description !!}</h5>
+                                                    <hr style="border: 0.3px solid lightgrey;width: 100%;">
+                                                </div>
+                                            @endforeach
+                                            <?php
+                                            ?>
+                                        @endif
                                     @endif
+                                    <?php 
+                                    }
+                                    ?>
                                 </div>
                             </div>
                         @endforeach

@@ -59,7 +59,7 @@ class OrderController extends Controller
             'gender' => 'required',
         ]);
 
-if (UserDetail::where('username', '=', Input::get('username'))->exists() || User::where('email', '=', Input::get('email'))->exists()) {
+if (UserDetail::where('username', '=', $request->get('username'))->exists() || User::where('email', '=', $request->get('email'))->exists()) {
             return redirect()->back()->with('message', 'Username and email alreday exist');
         }
 
@@ -143,7 +143,7 @@ if (UserDetail::where('username', '=', Input::get('username'))->exists() || User
             'user_id' => $user->id,
             'first_name' => $request->get('name'),
             'last_name' => $request->get('nickname'),
-			 'email' => $user->email,
+            'email' => $user->email,
             'gender' => $request->get('gender'),
             'mobile' => $request->get('phonenumber'),
         ]);
@@ -155,18 +155,39 @@ if (UserDetail::where('username', '=', Input::get('username'))->exists() || User
     public function current()
     {
         $data = Auth::user()->orders;
-
-        foreach ($data as $key => $value) {
-            $order = Order::find($value->id);
-            $messages = Messenger::where('to', Auth::user()->id)->orWhere('from', Auth::user()->id)->orderBy('created_at', 'asc')->get();
-            $product = Product::find($value->product_id);
-            $design = Design::find($value->design_id);
-            $website = Website::find($value->website_id);
-            $secret = 'b3d328f07199b1d0df8d783333badf79';
-            $sig = hash_hmac('sha256', Auth::user()->email, $secret);
-            $tax = str_replace(".", ",", number_format(((float)str_replace(",", ".", $value->total_price) * 0.19), 2));
+        if(!empty($data)){
+            foreach ($data as $key => $value) {
+                $order = Order::find($value->id);
+                $messages = Messenger::where('to', Auth::user()->id)->orWhere('from', Auth::user()->id)->orderBy('created_at', 'asc')->get();
+                $product = Product::find($value->product_id);
+                $design = Design::find($value->design_id);
+                $website = Website::find($value->website_id);
+                $secret = 'b3d328f07199b1d0df8d783333badf79';
+                $sig = hash_hmac('sha256', Auth::user()->email, $secret);
+                $tax = str_replace(".", ",", number_format(((float)str_replace(",", ".", $value->total_price) * 0.19), 2));
+            }
+                $product_description = explode('<li>', $order->pdetail->product_description);
+                $data = $words = preg_replace('/(?<!\ )[A-Z]/', ' $0', $product_description[0]);
+                // dd($product_description , $data, $order->check_box);
+    
+                if ($product_description[0] == $data) {
+                    unset($product_description[0]);
+                }
+                $check = explode(',', $order->check_box);
+                if($order->check_box == 0){
+                    $task_completed = 0;
+                }else{
+                    $task_completed = count($check);
+                }
+                $no_of_tasks = sizeof($product_description); 
+                $task_percentage = ($task_completed/$no_of_tasks)*100;
+    
+            //  dd( $task_percentage, $task_completed, $no_of_tasks);
+            return view('orders.current_order', compact('order', 'product', 'design', 'website', 'sig', 'tax', 'messages', 'no_of_tasks', 'task_completed', 'task_percentage'));
+        }else{
+            return redirect()->back();
         }
-        return view('orders.current_order', compact('order', 'product', 'design', 'website', 'sig', 'tax', 'messages'));
+        
     }
     public function express($id)
     {

@@ -1,0 +1,115 @@
+/*================================================================================
+	Item Name: Vuexy - Vuejs, HTML & Laravel Admin Dashboard Template
+	Version: 2.0
+	Author: PIXINVENT
+	Author URL: http://www.themeforest.net/user/pixinvent
+================================================================================
+
+NOTE:
+------
+PLACE HERE YOUR OWN SCSS CODES AND IF NEEDED, OVERRIDE THE STYLES FROM THE OTHER STYLESHEETS.
+WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BETTER LIKE THIS.  */
+
+
+#rechungan {
+    color: yellow;
+}
+
+body .floating-nav-progress{
+	top:6.5px !important;
+	background-color: transparent !important;
+	
+}
+.current-order-page-navbar .navbar-container .bookmark-wrapper{
+	flex-basis: 69%;
+	justify-content: center;
+	background-color: #EAEBF5;
+	border-radius: .5rem;
+}
+.strat-order{
+	border-radius: 25px;
+}
+.ui-widget-header {
+	background: #e63233;
+	border: 1px solid #e63233;
+}
+.purple-text{
+	color: #311F5D;
+}
+
+.card-border-rad{
+	border-radius: 10px;
+}
+.card-header-contact{
+	border-top-right-radius: 10px;
+	border-top-left-radius:10px ;
+	color: #fff;
+}
+.card-header-contact{
+	background-color: #311F5D;
+}
+
+textarea[name='user_personal']{
+	background-color: transparent !important;
+}
+
+.feed {
+    background: transparent;
+    height: 100%;
+    height: 100px;
+}
+
+.accordian-collapse-margin .card{
+	box-shadow: none !important;
+}
+
+.collapse-icon-plus [data-toggle=collapse]:after {
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='35' height='35' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' class='feather feather-plus'%3E%3Cline x1='12' y1='5' x2='12' y2='19'%3E%3C/line%3E%3Cline x1='5' y1='12' x2='19' y2='12'%3E%3C/line%3E%3C/svg%3E");
+	background-size: 35px;
+    width: 35px;
+    height: 25px;
+	margin-top: -15px;
+}
+
+.collapse-icon-plus [aria-expanded=true]:after {
+    transform: rotate(-495deg);
+}
+
+.collapse-icon-plus.changed [data-toggle=collapse]:after {
+	background-image: url("../images/icons/check.png");
+	transform: rotate(5deg);
+	height: 35px;
+}
+.green-box-shadow{
+	box-shadow : 0px -7px 0px 0px #28c76f !important;
+}
+
+/* width */
+.feed{
+	height: 50px;
+	overflow-x: hidden;
+}
+
+#employee_id input{
+	border: none;
+}
+.feed::-webkit-scrollbar {
+	width: 0px;
+  }
+  
+  /* Track */
+  .feed::-webkit-scrollbar-track {
+	box-shadow: inset 0 0 5px grey; 
+	border-radius: 10px;
+  }
+   
+  /* Handle */
+  .feed::-webkit-scrollbar-thumb {
+	background: rgb(20, 20, 20); 
+	border-radius: 10px;
+  }
+  
+  /* Handle on hover */
+  .feed::-webkit-scrollbar-thumb:hover {
+	background: #b30000; 
+  }

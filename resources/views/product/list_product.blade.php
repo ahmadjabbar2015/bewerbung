@@ -20,7 +20,7 @@
     <!-- Basic table -->
     <h1>{{ __('locale.List Product') }}</h1>
     <section id="basic-datatable">
-         <div class="row">
+        <div class="row">
             <div class="col-md-12">
                 <div class="card ">
                     <div class="col-md-12">
@@ -77,6 +77,7 @@
             </div>
         </div>
         </div>
+
         <div class="row">
             <div class="col-md-12">
                 @if (session('message'))

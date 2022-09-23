@@ -39,6 +39,7 @@ class AdminOrderController extends Controller
         ->join('users','users.id','=','orders.customer_id')
         ->select('orders.*','users.name as name')
         ->get();
+        // dd($orders);
         $employees = User::whereHas('roles', function ($q) {
             $q->where('id', '2');
         })->get();
@@ -49,6 +50,7 @@ class AdminOrderController extends Controller
         Session::put('completed', Order::where('order_status', '4')->orderBy('created_at', 'Desc')->count());
         Session::put('cancelled', Order::where('order_status', '1')->orderBy('created_at', 'Desc')->count());
         Session::put('deleted', Order::onlyTrashed()->count());
+
         return view('orders.list_order', compact('orders', 'dropdown', 'employees'));
     }
     public function search(request $request)
@@ -100,6 +102,7 @@ class AdminOrderController extends Controller
         if (isset($order_id_in_db->order_id)) {
             $ind_order_id = explode(",", $order_id_in_db->order_id);
             if (!in_array($order, $ind_order_id)) {
+
                  User::where("id", $id)->update([
                     "status" => $status,
                     "order_id" => empty($order_id_in_db->order_id) ? '' . $order : $order_id_in_db->order_id . ',' . $order
@@ -113,12 +116,13 @@ class AdminOrderController extends Controller
             $employ = explode(",", $data->user_id);
             if (!in_array($id, $employ)) {
                 order::where("id", $order)->update([
-                    "order_status"=>$order_status,
+                    "order_status"=>  $order_status,
                     "user_id" => empty($data->user_id) ? '' . $id : $data->user_id . ',' . $id
                 ]);
 
             }
         }
+
       $suertable =   User::where("id", $id)->first();
       $data = json_encode($suertable);
       return response($data);
@@ -299,52 +303,49 @@ class AdminOrderController extends Controller
             'city'=>$order->user->userdetail->city,
 
         ];
-		  $timestemp = date("Y-m-d H:i:s");
+        $timestemp = date("Y-m-d H:i:s");
         $year = Carbon::createFromFormat('Y-m-d H:i:s', $timestemp)->year;
         $month = Carbon::createFromFormat('Y-m-d H:i:s', $timestemp)->month;
         $month = str_pad($month, 2, '0', STR_PAD_LEFT);
         $year = substr($year, -2);
         $date = $year. "-" .$month;
-        $checker = ReferenceCount::exists();
-        if (!$checker){
-            $refercen_no = "RE-".$year.$month."-1000";
-            $InsertRefernceCount = new ReferenceCount();
-            $InsertRefernceCount->refer_type = 'Invoice';
-            $InsertRefernceCount->date = $date;
-            $InsertRefernceCount->reference_num = $refercen_no;
-            $InsertRefernceCount->save();
-        } else {
-            $saveDate =  ReferenceCount::latest()->first();
-            if($date == $saveDate->date)
-            {
-                // $refercen_no = "RE-".$year.$month."-1000";
-                $refercen_no = $saveDate->reference_num;
-                $numArr = explode('-', $refercen_no);
-                $newnum = 1 + intval($numArr[2]);
-                $refercen_no = "RE-".$year.$month.'-'.$newnum;
-                $affectedRows = ReferenceCount::where("date", $date)->update([
-                "reference_num" => $refercen_no
-                ]);
-            }
-            else{
-                $refercen_no = "RE-".$year.$month."-1000";
-                $InsertRefernceCount = new ReferenceCount();
-                $InsertRefernceCount->refer_type = 'Invoice';
-                $InsertRefernceCount->date = $date;
-                $InsertRefernceCount->reference_num = $refercen_no;
-                $InsertRefernceCount->save();
-            }
+        // $checker = ReferenceCount::exists();
+        // if (!$checker){
+        //     $refercen_no = "RE-".$year.$month."-1000";
+        //     $InsertRefernceCount = new ReferenceCount();
+        //     $InsertRefernceCount->refer_type = 'Invoice';
+        //     $InsertRefernceCount->date = $date;
+        //     $InsertRefernceCount->reference_num = $refercen_no;
+        //     $InsertRefernceCount->save();
+        // } else {
+        //     $saveDate =  ReferenceCount::latest()->first();
+        //     if($date == $saveDate->date)
+        //     {
+        //         // $refercen_no = "RE-".$year.$month."-1000";
+        //         $refercen_no = $saveDate->reference_num;
+        //         $numArr = explode('-', $refercen_no);
+        //         $newnum = 1 + intval($numArr[2]);
+        //         $refercen_no = "RE-".$year.$month.'-'.$newnum;
+        //         $affectedRows = ReferenceCount::where("date", $date)->update([
+        //         "reference_num" => $refercen_no
+        //         ]);
+        //     }
+        //     else{
+        //         $refercen_no = "RE-".$year.$month."-1000";
+        //         $InsertRefernceCount = new ReferenceCount();
+        //         $InsertRefernceCount->refer_type = 'Invoice';
+        //         $InsertRefernceCount->date = $date;
+        //         $InsertRefernceCount->reference_num = $refercen_no;
+        //         $InsertRefernceCount->save();
+        //     }
 
-        }
+        // }
 
         $refercen_num =  ReferenceCount::latest()->first();
         // dd($refercen_num->reference_num);
         return view('orders.dowenlode', compact('items','refercen_num'));
-       
 
     }
-
-
     public function deleteall(request $request)
     {
         $selector = $request->selector;
@@ -375,7 +376,7 @@ class AdminOrderController extends Controller
         return redirect('list_order');
 
     }
-       public function allinvoice(request $request)
+    public function allinvoice(request $request)
     {
         $selector = $request->selector;
         $invoice = [];
@@ -499,6 +500,7 @@ class AdminOrderController extends Controller
 
          return response()->download(public_path($fileName));
     }
+
     public function updateorder(Request $request, $id)
     {
         $order = Order::find($id);

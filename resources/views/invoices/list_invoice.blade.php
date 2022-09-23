@@ -131,7 +131,7 @@
     <!-- Basic table -->
     <h1>{{ __('locale.List Bills') }}</h1>
     <section id="basic-datatable">
-         <div class="row">
+        <div class="row">
             <div class="col-md-12">
                 <div class="card ">
                     <div class="row">
@@ -281,6 +281,10 @@
                                             aria-haspopup="true" aria-expanded="false">Order Buttons
                                         </button>
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+
+                                            <button class="col-md-12 multiSelector"
+                                                style="border: none;background-color: rgb(255, 255, 255);"
+                                                type="submit">Delete</button><br>
                                             <button class="col-md-12 multiSelector" style="border: none;background-color: #fff;"
                                                 type="submit">Download all</button>
                                         </div>
@@ -304,7 +308,7 @@
                                     {{-- <label class="form-check-label" for="checkbox" class=" label-table"></label> --}}
                                 </th>
                                 <th>{{ __('locale.ID') }}</th>
-								 <th><i data-feather="trending-up"></i></th>
+                                <th><i data-feather="trending-up"></i></th>
                                 <th>{{ __('locale.Name') }}</th>
                                 <th>{{ __('locale.Order Status') }}</th>
                                 <th>{{ __('locale.Date') }}</th>
@@ -322,7 +326,7 @@
                                     </td>
                                     <td><a href="{{ url('invoices/' . $order->id) }}" class="text-body font-weight-bold">#{{ $order->id }}</a>
                                     </td>
-									  <?php
+                                    <?php
                                     if($order->payment_status == 1)
                                     {
                                         $divclass = "bg-light-success";
@@ -364,6 +368,7 @@
                                             ?>
                                         @endforeach
                                     </td>
+
                                     <td>
                                         @if ($order->order_status == 0)
                                             <div class="text-center">
@@ -440,7 +445,10 @@
                                                 <i data-feather='more-vertical'></i> </button>
                                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                                 <a href={{ url('invoicepdf/' . $order->id) }} class="dropdown-item">Download</a>
-                                                                                 
+                                                <a href="javascript:void(0)" class="dropdown-item">Edit</a>
+                                                <a href="javascript:void(0)" class="delete-confirm dropdown-item">Delete</a>
+                                                <a href="javascript:void(0)" class="dropdown-item">Duplicate</a>
+
                                             </div>
                                         </div>
                                     </td>
@@ -522,6 +530,7 @@ if (!$("#allSelector").is(':checked')) {
 <script>
     $(document).ready(function(){
         $('.multiSelector').click(function(e) {
+
                 $('#order').val($('.checkbox:checked').map(function() {
                     return this.value;
                 }).get().join(','));
@@ -566,7 +575,7 @@ if (!$("#allSelector").is(':checked')) {
                 $('.checkbox').css('display','block');
                 $('#notificationBarBottom').removeClass('hideMe');
                 $('.totalselected').text($boxes.length);
-  				 $('td.checkboxdisplay').hover(
+                $('td.checkboxdisplay').hover(
                         function() {
                             $('.checkbox').css('display', 'block');
                         },
@@ -574,6 +583,7 @@ if (!$("#allSelector").is(':checked')) {
                             $('.checkbox').css('display', 'block');
                         }
                     );
+
             }
             else{
                 if($boxes.length == 0)

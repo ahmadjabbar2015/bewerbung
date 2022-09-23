@@ -20,7 +20,7 @@
     <!-- Basic table -->
     <h1>{{ __('locale.List category') }}</h1>
     <section id="basic-datatable">
-           <div class="row">
+        <div class="row">
             <div class="col-md-12">
                 <div class="card ">
                     <center>

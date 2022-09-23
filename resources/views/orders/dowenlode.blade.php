@@ -1,12 +1,13 @@
 
 
-<?php 
+<?php
 
 
 
-require_once  './vendores/autoload.php';
+// require_once  './vendores/autoload.php';
+require_once 'C:\xampp\htdocs\germanythememaster\germany-theme\vendores\autoload.php';
 
- 
+
 $mpdf = new \Mpdf\Mpdf();
 $mpdf->Bookmark('Start the document ');
 
@@ -17,9 +18,9 @@ $html = '<body>
 
   <div class="row" >
             <div class="div_left">
-            <img class="img_bom" src="./images/logo/pdglogo.png" alt="logo">
+            <img class="img_bom" src="C:\xampp\htdocs\germanythememaster\germany-theme\images\logo\pdglogo.png" alt="logo">
+                  <span  style="font-size:11px;"><u>Bewerbung.one|Nordkanalstr.52,20097 Hamburg</u></span>
                   <address class="text-muted">
-				    <span  style="font-size:11px;"><u>Bewerbung.one|Nordkanalstr.52,20097 Hamburg</u></span><br>
                       '.$items['user_name'].'<br>
                       '.$items['street_no'].', '.$items['house_no'].'<br>
                       '.$items['zip_code'].', '.$items['city'].'<br><br>
@@ -29,15 +30,15 @@ $html = '<body>
                   </address>
             </div>
     <div class="div_right" >
-                              
+
                                     <div class="invoice_no">
                                         <p >#'.$items['order_id'].'</p>
                                         <span>'. \Carbon\Carbon::parse($items['order_created_at'])->format('d.m.Y h:m').'</span>
                                     </div>
-                                    
+
                                         <p class="rech_h2">RECHNUNG</p>
-                                    
-                                    
+
+
                                         <p class="p-1" style="background-color: #323759 ;margin-left:50px; padding:5px;">
                                         <b style="color: lightgrey">STATUS</b>  ';
                                         if($items['order_status']==1||$items['order_status']==2||$items['order_status']==3){
@@ -46,7 +47,7 @@ $html = '<body>
                                           $html.= '
                                         <span style="color:lightblue;" >Rechnung wurde bezahlt </span> ';
                                         }elseif($items['order_status']==-1){
-                                          $html.=' 
+                                          $html.='
                                         <span style="color:pink;" >Storniert/Abgebrochen </span>';
                                         }elseif($items['order_status']==-2){
                                           $html.='
@@ -57,7 +58,7 @@ $html = '<body>
                                         }
                                         $html.= ' </p>
 
-                                        
+
                                         <table class="tbl_div">
                                         <tr >
                                         <td class="tbl_div_tr" style="border-right: 1px solid #323759">Bestellnummer <br><br>
@@ -70,20 +71,20 @@ $html = '<body>
                                         '. \Carbon\Carbon::parse($items['order_completion_date'])->format('d.m.Y').'
                                         </td>
                                         </tr>
-                                        
+
                                         </table>
 
-                                                
-                                
 
-                                    
-                                
+
+
+
+
     </div>
 
   </div>
   <div class="main_tbl">
   <table class="tbl_data" >
-                                    
+
                                     <tr class="header_da">
                                         <th class="th_pad">Nr</th>
                                         <th class="da_tr">Produkt</th>
@@ -92,7 +93,7 @@ $html = '<body>
                                     <tr class="tbody_bo">
                                         <td class="th_pad">1</td>
                                         <td style="padding:10px;">
-                                        
+
                                             <p style="font-size: 1.2em">
                                             '.$items['product_name'].'</p>
                                             <p style="font-size: 0.8em" class="text-muted">'.$items['product_language'].'</p>
@@ -108,7 +109,7 @@ $html = '<body>
                                             </td>
                                             <td class="th_price">'.$items['express'].' €</td>
                                         </tr>
-                                         
+
                                         ';
                                     } $html.='
                                     <tr tbody_bo>
@@ -124,8 +125,8 @@ $html = '<body>
                                         </td>
                                         <td class="th_price">'.$items['design_price'].' €</td>
                                     </tr>
-                                   
-                                   
+
+
                                     <tr tbody_bo>
                                         <td class="th_pad">3</td>
                                         <td style="padding:10px;">
@@ -134,18 +135,18 @@ $html = '<body>
                                         </td>
                                         <td class="th_price">'.$items['website_price'].' €</td>
                                     </tr>
-                                    
-                                   
+
+
   </table>
-                            
+
                                 <p class="total_pr">Zwischensumme: '.$items['price'] .'€</p>
                                 <p class="total_prp">19% Umsatzsteuer: '.$items['tax'].' €</p>
 
-                                
 
 
 
-                           
+
+
  </div>
 
   <div class="row1" >
@@ -154,10 +155,10 @@ $html = '<body>
 
             </div>
     <div class="div_right2" >
-                              
+
       <h3 >Gesamt: '.$items['total_price'].' €</h3>
 
-                                
+
     </div>
 
  </div>
@@ -190,12 +191,12 @@ $html = '<body>
 
             </div>
     <div class="div_right3" >
-                              
-    <p  class="paypal"><img src="./images/logo/paypallogo.png" alt="paypallogo" ></p>
+
+    <p  class="paypal"><img src="C:\xampp\htdocs\germanythememaster\germany-theme\images\logo\paypallogo.png" alt="paypallogo" ></p>
     <p style="color:black" class="bnk_tbl2">Rufen Sie folgende Seite auf :</p>
     <p class="bnk_tbl3"><a href="https://die.bewerbung.one/paypal/35468">https://die.bewerbung.one/paypal/35468</a></p>
 
-                                
+
     </div>
 
 </div>
@@ -212,7 +213,7 @@ $html = '<body>
 						<div class="div5_2">
 							<p style="margin-bottom: 0;font-weight: bold"></p>
 							<address>
-								
+
 								info@graviando.com <br>
 								www.graviando.com
 							</address>
@@ -234,9 +235,9 @@ $html = '<body>
 								Amtsgericht:Hamburg
 							</address>
 						</div>
-						
+
 </div>
-<div class="bottom_line" style="background-color: #323759; padding:5px;"></div>
+<div style="background-color: #323759; padding:5px;"></div>
 
 </body>
 
@@ -247,15 +248,19 @@ $html = '<body>
 // echo($html);
 // die;
 // include("/mpdf.php");
-// $mpdf=new /Mpdf/Mpdf(); 
+
 $mpdf->SetDisplayMode('fullpage');
 // LOAD a stylesheet
-$stylesheet = file_get_contents('./public/tbl_style.css');
+$stylesheet = file_get_contents('C:\xampp\htdocs\germanythememaster\germany-theme\public\tbl_style.css');
 $mpdf->WriteHTML($stylesheet,1);
+// print_r('hellpo');
+// die;
 $mpdf->WriteHTML($html);
-
-$mpdf->Output(''.$refercen_num->reference_num.'.pdf','D'); 
-print_r($html);
-die;
-exit;
+// print_r($refercen_num->reference_num);
+// die;
+$mpdf->Output(''.$refercen_num->reference_num.'.pdf','D');
+// print_r($html);
+// die;
+// exit;
 ?>
+

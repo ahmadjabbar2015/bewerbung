@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 use App\Models\Order;
+use App\Models\User;    
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
 
@@ -64,11 +66,14 @@ class tasksController extends Controller
     public function emloyeetask()
     {
         $orders = Order::orderBy('created_at', 'desc')->get();
-        return view('tasks.employetask',compact("orders"));
+        $user=User::find(Auth::user()->id);
+        // dd($orders);
+        return view('tasks.employetask',compact("orders" , "user"));
     }
     public function checkedemtask($id,$order,$loop)
     {
         $data = order::where("id", $order)->get('check_box')->first();
+        
         if (isset($data->check_box)) {
             $employ = explode(",", $data->check_box);
             if (!in_array($id, $employ)) {

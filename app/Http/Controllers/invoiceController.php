@@ -17,9 +17,9 @@ class invoiceController extends Controller
     public function list_invoice()
     {
         $orders=Order::orderBy('created_at','ASC')->get();
-
         $ClientDetail=ClientDetail::orderBy('created_at','ASC')->get();
-
+        //  $ClientDetail = User::orderBy('created_at', 'ASC')->with('userdetail')->get();
+        // dd($ClientDetail);
         $employees=User::whereHas('roles', function($q) {
             $q->where('id', '2');
         })->get();
@@ -29,9 +29,6 @@ class invoiceController extends Controller
         Session::put('completed',Order::where('order_status','4')->orderBy('created_at','ASC')->count());
         Session::put('cancelled',Order::where('order_status','1')->orderBy('created_at','ASC')->count());
         Session::put('deleted',Order::onlyTrashed()->count());
-
-
-
         return view('invoices.list_invoice',compact('orders','ClientDetail'));
     }
      public function invoices($id)
@@ -123,4 +120,17 @@ class invoiceController extends Controller
 
 
      }
+
+    //  public function deleteallInvoices(request $request)
+    //  {
+    //      $selector = $request->selector;
+    //      dd($request->all());
+    //      if ($selector != 0) {
+    //          foreach ($selector as  $value) {
+    //              Order::where('id', $value)->delete();
+    //          }
+    //      }
+
+    //      return redirect('list_order');
+    //  }
 }

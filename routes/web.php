@@ -94,7 +94,7 @@ Route::get('editcategory/{id}/{flag}', [categorycontroller::class, 'edit'])->nam
 Route::post('categoryupdate/{id}/{flag}', [categorycontroller::class, 'update'])->name('update');
 Route::resource('category', categorycontroller::class);
 /* Route Orders*/
-Route::get('current', [OrderController::class, 'current'])->name('current');
+Route::get('current', [OrderController::class, 'current'])->name('order.current');
 Route::get('express/{id}', [OrderController::class, 'express'])->name('express');
 Route::post('documents/{id}', [OrderController::class, 'documents'])->name('documents');
 Route::get('deledocuments/{id}', [OrderController::class, 'deledocuments'])->name('deledocuments');
@@ -133,6 +133,7 @@ Route::post('saveNotes/{id}', [AdminOrderController::class, 'saveNotes'])->name(
 Route::get('list_invoice', [invoiceController::class, 'list_invoice'])->name('list_invoice');
 Route::get('invoices/{id}', [invoiceController::class, 'invoices'])->name('invoices');
 Route::post('searchinvoice', [invoiceController::class, 'search'])->name('search');
+// Route::post('deleteallInvoices', [invoiceController::class, 'deleteallInvoices'])->name('deleteallInvoices');
  /* Route Settings*/
  Route::get('EditAccount', [SettingController::class, 'EditAccount'])->name('EditAccount');
  Route::get('MyAccount', [SettingController::class, 'MyAccount'])->name('MyAccount');

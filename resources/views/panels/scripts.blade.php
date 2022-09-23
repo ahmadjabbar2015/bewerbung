@@ -8,6 +8,9 @@
 @if($configData['blankPage'] === false)
 <script src="{{ asset(mix('js/scripts/customizer.js')) }}"></script>
 @endif
+<script type="text/javascript" 
+            src="https://code.jquery.com/ui/1.10.4/jquery-ui.js">
+</script>
 {{-- page script --}}
 @yield('page-script')
 {{-- page script --}}

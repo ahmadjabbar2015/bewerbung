@@ -21,7 +21,9 @@
 
 {{-- Laravel Style --}}
 <link rel="stylesheet" href="{{ asset(mix('css/overrides.css')) }}" />
-
+<link rel="stylesheet" 
+          type="text/css" 
+href="https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css">
 
 {{-- Custom RTL Styles --}}
 
@@ -32,3 +34,4 @@
 
 {{-- user custom styles --}}
 <link rel="stylesheet" href="{{ asset(mix('css/style.css')) }}" />
+<link rel="stylesheet" href="{{ asset('css/style.css') }}" />
